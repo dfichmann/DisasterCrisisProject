@@ -1,0 +1,44 @@
+
+% Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
+% Date and time: Mon, May 15, 2023 - 15:24:49
+% Requires LaTeX packages: dcolumn 
+\begin{table}[!htbp] \centering 
+  \caption{Disaster Dummies (1900 - 2020)} 
+  \label{T1_dummy} 
+\footnotesize 
+\begin{tabular}{@{\extracolsep{-5pt}}lD{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{Dependent Variable: Crisis in $year = t$ } \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)}\\ 
+\hline \\[-1.8ex] 
+ $Disaster_{t}$ & -0.023 &  &  &  \\ 
+  & (0.214) &  &  &  \\ 
+  $Disaster_{t-1}$ & 0.740^{***} &  &  &  \\ 
+  & (0.212) &  &  &  \\ 
+  $Disaster_{t-2}$ & 0.021 &  &  &  \\ 
+  & (0.249) &  &  &  \\ 
+  $Disaster_{t-3}$ & 0.028 &  &  &  \\ 
+  & (0.253) &  &  &  \\ 
+  $Strong Disaster_{t}$ &  & 0.257 & 0.155 & 0.465 \\ 
+  &  & (0.269) & (0.293) & (0.612) \\ 
+  $Strong Disaster_{t-1}$ &  & 0.861^{***} & 0.888^{**} & 0.786 \\ 
+  &  & (0.300) & (0.380) & (0.491) \\ 
+  $Strong Disaster_{t-2}$ &  & -0.412 & -0.485 & -0.240 \\ 
+  &  & (0.316) & (0.357) & (0.654) \\ 
+  $Strong Disaster_{t-3}$ &  & 0.411 & 0.334 & 0.574 \\ 
+  &  & (0.309) & (0.388) & (0.513) \\ 
+  Constant & -2.853^{***} & -2.626^{***} & -4.245^{***} & -2.634^{***} \\ 
+  & (0.111) & (0.010) & (0.183) & (0.023) \\ 
+ \hline \\[-1.8ex] 
+Country fixed effects & Yes & Yes & Yes & Yes \\ 
+Income group & All & All & High & Low \\ 
+Observations & \multicolumn{1}{c}{4,671} & \multicolumn{1}{c}{4,671} & \multicolumn{1}{c}{3,151} & \multicolumn{1}{c}{1,520} \\ 
+Log Likelihood & \multicolumn{1}{c}{-657.948} & \multicolumn{1}{c}{-657.073} & \multicolumn{1}{c}{-456.994} & \multicolumn{1}{c}{-199.690} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{l}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+ & \multicolumn{4}{l}{Cluster-robust standard errors are shown in parentheses.} \\ 
+\end{tabular} 
+\end{table} 

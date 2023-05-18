@@ -1,0 +1,40 @@
+
+% Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
+% Date and time: Mon, May 15, 2023 - 15:24:54
+% Requires LaTeX packages: dcolumn 
+\begin{table}[!htbp] \centering 
+  \caption{Controlling for economic growth} 
+  \label{T2_gdp} 
+\footnotesize 
+\begin{tabular}{@{\extracolsep{5pt}}lD{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{3}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-4} 
+\\[-1.8ex] & \multicolumn{2}{c}{\textit{logistic}} & \multicolumn{1}{c}{\textit{OLS}} \\ 
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)}\\ 
+\hline \\[-1.8ex] 
+ Damages 5yr ma & 0.149^{***} & -0.099 & -0.002^{***} \\ 
+  & (0.057) & (0.080) & (0.0004) \\ 
+  Credit 5yr ma & 14.854^{***} & 13.572^{***} &  \\ 
+  & (3.120) & (2.886) &  \\ 
+  $\Delta$ GDP ma & -17.747^{***} & -17.939^{***} &  \\ 
+  & (5.181) & (5.267) &  \\ 
+  Damages ma $\times \Delta Credit$ ma &  & 9.636^{***} &  \\ 
+  &  & (1.945) &  \\ 
+  Constant & -5.085^{***} & -5.397^{***} & 0.034^{***} \\ 
+  & (0.206) & (0.199) & (0.004) \\ 
+ \hline \\[-1.8ex] 
+Country fixed effects & Yes & Yes & Yes \\ 
+Year fixed effects & No & No & Yes \\ 
+Observations & \multicolumn{1}{c}{1,900} & \multicolumn{1}{c}{1,900} & \multicolumn{1}{c}{2,003} \\ 
+Adjusted R$^{2}$ &  &  & \multicolumn{1}{c}{0.245} \\ 
+Log Likelihood & \multicolumn{1}{c}{-230.713} & \multicolumn{1}{c}{-225.531} &  \\ 
+Residual Std. Error &  &  & \multicolumn{1}{c}{0.033} \\ 
+F Statistic &  &  & \multicolumn{1}{c}{5.924$^{***}$} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{3}{l}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+ & \multicolumn{3}{l}{Cluster-robust standard errors are shown in parentheses.} \\ 
+\end{tabular} 
+\end{table} 

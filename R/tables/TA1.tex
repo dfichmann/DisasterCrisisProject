@@ -1,0 +1,39 @@
+
+% Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
+% Date and time: Sat, May 06, 2023 - 18:13:54
+% Requires LaTeX packages: dcolumn 
+\begin{table}[!htbp] \centering 
+  \caption{ANNEX Effect of a strong natural disaster (unweighted) on crisis risk (1900 - 2020)} 
+  \label{TA1} 
+\footnotesize 
+\begin{tabular}{@{\extracolsep{-5pt}}lD{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{5}{c}{Dependent Variable: Crisis in $year = t$ } \\ 
+\cline{2-6} 
+\\[-1.8ex] & \multicolumn{3}{c}{\textit{logistic}} & \multicolumn{2}{c}{\textit{OLS}} \\ 
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)} & \multicolumn{1}{c}{(5)}\\ 
+\hline \\[-1.8ex] 
+ $Damages (pc GDP)_{t}$ & -0.021 & -0.019 & 0.010 & -0.001 & -0.0001 \\ 
+  & (0.037) & (0.038) & (0.034) & (0.0004) & (0.001) \\ 
+  $Damages (pc GDP)_{t-1}$ & -0.055 & -0.054 & -0.033 & -0.001 & -0.001 \\ 
+  & (0.111) & (0.108) & (0.121) & (0.001) & (0.001) \\ 
+  $Damages (pc GDP)_{t-2}$ & 0.049^{***} & 0.048^{***} & 0.076^{***} & 0.005^{***} & 0.006^{***} \\ 
+  & (0.012) & (0.013) & (0.020) & (0.001) & (0.001) \\ 
+  $Damages (pc GDP)_{t-3}$ & -0.013 & -0.013 & 0.006 & -0.001^{**} & -0.001 \\ 
+  & (0.038) & (0.033) & (0.027) & (0.0002) & (0.001) \\ 
+ \hline \\[-1.8ex] 
+Country fixed effects & No & Yes & Yes & No & Yes \\ 
+Year fixed effects & No & No & No & No & Yes \\ 
+Restricted sample & No & No &  Yes & No & No \\ 
+Observations & \multicolumn{1}{c}{2,102} & \multicolumn{1}{c}{2,102} & \multicolumn{1}{c}{1,278} & \multicolumn{1}{c}{2,102} & \multicolumn{1}{c}{2,102} \\ 
+Adjusted R$^{2}$ &  &  &  & \multicolumn{1}{c}{0.003} & \multicolumn{1}{c}{0.206} \\ 
+Log Likelihood & \multicolumn{1}{c}{-270.584} & \multicolumn{1}{c}{-263.765} & \multicolumn{1}{c}{-116.849} &  &  \\ 
+Residual Std. Error &  &  &  & \multicolumn{1}{c}{0.166} & \multicolumn{1}{c}{0.148} \\ 
+F Statistic &  &  &  & \multicolumn{1}{c}{2.645$^{**}$} & \multicolumn{1}{c}{4.961$^{***}$} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{5}{l}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+ & \multicolumn{5}{l}{Estimates are coefficients and standard errors are shown in parentheses.} \\ 
+\end{tabular} 
+\end{table} 

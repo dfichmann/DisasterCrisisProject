@@ -1,0 +1,43 @@
+
+% Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
+% Date and time: Wed, May 17, 2023 - 16:35:03
+% Requires LaTeX packages: dcolumn 
+\begin{table}[!htbp] \centering 
+  \caption{Main results including other types of disasters} 
+  \label{TA_alltypes.tex} 
+\footnotesize 
+\begin{tabular}{@{\extracolsep{5pt}}lD{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{Dependent Variable: Crisis in $year = t$ } \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)}\\ 
+\hline \\[-1.8ex] 
+ $Damages (pct GDP)_{t}$ & -0.095 & -0.060 &  &  \\ 
+  & (0.177) & (0.205) &  &  \\ 
+  $Damages (pct GDP)_{t-1}$ & -0.001 & 0.066 &  &  \\ 
+  & (0.037) & (0.055) &  &  \\ 
+  $Damages (pct GDP)_{t-2}$ & 0.055^{***} & 0.136^{***} &  &  \\ 
+  & (0.007) & (0.040) &  &  \\ 
+  $Damages (pct GDP)_{t-3}$ & 0.059 & 0.140^{*} &  &  \\ 
+  & (0.037) & (0.081) &  &  \\ 
+  Damages 5yr ma &  &  & 0.175^{***} & -0.022 \\ 
+  &  &  & (0.050) & (0.078) \\ 
+  Credit 5yr ma &  &  & 9.577^{***} & 8.416^{***} \\ 
+  &  &  & (2.473) & (2.300) \\ 
+  Damages ma $\times \Delta Credit$ ma &  &  &  & 7.721^{***} \\ 
+  &  &  &  & (2.022) \\ 
+  Constant & -4.757^{***} & -4.620^{***} & -5.369^{***} & -5.939^{***} \\ 
+  & (0.121) & (0.423) & (0.201) & (0.247) \\ 
+ \hline \\[-1.8ex] 
+Country fixed effects & Yes & Yes & Yes & Yes \\ 
+Year fixed effects & No & No & No & No \\ 
+Restricted sample & No & Yes &  No & No \\ 
+Observations & \multicolumn{1}{c}{2,084} & \multicolumn{1}{c}{1,278} & \multicolumn{1}{c}{1,966} & \multicolumn{1}{c}{1,966} \\ 
+Log Likelihood & \multicolumn{1}{c}{-262.455} & \multicolumn{1}{c}{-113.835} & \multicolumn{1}{c}{-240.963} & \multicolumn{1}{c}{-237.029} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{l}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+ & \multicolumn{4}{l}{Cluster-robust standard errors are shown in parantheses.} \\ 
+\end{tabular} 
+\end{table} 

@@ -1,0 +1,195 @@
+######## INTRODUCTION ##########
+#   to run this script you can change the working directory to this folder:
+#setwd("C:\\Users\\settm\\Dropbox\\Disaster_and_Crisis_Project\\DanielsProposal\\") #Set working directory
+setwd("~/Library/CloudStorage/Dropbox/MY_files/School/SciencesPo/Semester_4/Thesis/R")######## PACKAGES ###########
+# Then lets load all the libraries. The necessary packages are commented out:
+library(tidyverse) 
+library("RColorBrewer")
+library(ggplot2)
+library(readxl)
+#install.packages("janitor")
+library(janitor)
+library(haven)
+library(haven)
+library(dplyr)
+library(tidyr)
+library(car)
+library(stargazer)
+library(latex2exp)
+library(expss)
+library(ggplot2)
+library(gridExtra)
+library(plm)
+library(lmtest)
+library(ggpubr)
+library(vars)
+library(zoo)
+#install.packages("lubridate")
+library(lubridate)
+#install.packages("scales")
+library(scales)
+#install.packages("ggthemes", dependencies = TRUE)
+library(ggthemes)
+#install.packages("wesanderson")
+library(wesanderson)
+library(grid)
+#install.packages("countrycode")
+library(countrycode)
+#install.packages("WDI")
+library(WDI)
+library(dotwhisker)
+library(broom)
+library(sandwich)
+library(lpirfs)
+library(tibble)
+library(expss)
+#install.packages("fixest")
+library(fixest)
+
+####### COMPLING DISASTER DATA ##########
+EmDat <- read_excel("data/EmDatPublic202211.xlsx") #EmDat data in the folder
+colnames(EmDat)
+keep <- c(1,2,3,7,11,12,13,14,29,30,31,35,37,39,44,45,46)
+EmDat <- subset(EmDat, select = keep)
+colnames(EmDat)[4] = "DisasterType"
+colnames(EmDat)[9] = "StartYear"
+colnames(EmDat)[10] = "StartMonth"
+colnames(EmDat)[11] = "StartDay"
+colnames(EmDat)[12] = "TotalDeath"
+colnames(EmDat)[13] = "NoAffected"
+colnames(EmDat)[14] = "TotalAffected"
+colnames(EmDat)[15] = "TotalDamages_000US"
+colnames(EmDat)[16] = "TotalDamagesAdj_000US"
+
+EmDat$DateYM <- paste(EmDat$StartYear, EmDat$StartMonth, sep="-")
+EmDat$DateYM <- ym(EmDat$DateYM) #encoding date 
+EmDat$Yr <- ymd(EmDat$Year, truncated = 2L) #encoding year as a date 
+
+#Adding weights:
+mWeight <- (12 - EmDat$StartMonth)/12 #weight formula
+for (m in c("TotalDeath", "TotalDamages_000US", "TotalDamagesAdj_000US")) {
+  EmDat[,paste('weighted',m,sep="_")] <- EmDat[,paste(m)] * mWeight
+}
+
+disasterlist = c("Drought", "Earthquake", "Epidemic", 
+                 "Extreme temperature", "Flood", 
+                 "Storm", "Volcanic activity", "Wildfire")
+
+DisasterDF <- subset(EmDat,`DisasterType` %in% disasterlist) %>% 
+  group_by(Yr,ISO) %>%  # grouping over year and country
+  summarize(adj_DAM_000US = sum(TotalDamagesAdj_000US),
+            DAM_000US = sum(TotalDamages_000US),
+            DEATH = sum(TotalDeath),
+            w_adj_DAM_000US = sum(weighted_TotalDamagesAdj_000US),
+            w_DAM_000US = sum(weighted_TotalDamages_000US),
+            w_DEATH = sum(weighted_TotalDeath),
+            NoOfDis = n(),
+            .groups ='drop')
+
+addstrong <- subset(EmDat,`DisasterType` %in% disasterlist
+                    & TotalDamagesAdj_000US > median(EmDat$TotalDamagesAdj_000US, na.rm=TRUE)) %>%  #only abovemedian disasters
+  group_by(Yr, ISO) %>%
+  summarize(adj_strong_DAM_000US = sum(TotalDamagesAdj_000US),
+            strong_DAM_000US = sum(TotalDamages_000US),
+            strong_DEATH = sum(TotalDeath),
+            w_adj_strong_DAM_000US = sum(weighted_TotalDamagesAdj_000US),
+            w_strong_DAM_000US = sum(weighted_TotalDamages_000US),
+            w_strong_DEATH = sum(weighted_TotalDeath),
+            NoOfStrongDis = n(),
+            .groups ='drop')
+
+#Making it into Panel Data by merging the disaster data onto a base panel
+countrylist <- c("ARG", "AUS", "AUT", "BEL", "BRA", "CAN", "CHL", "TWN", "COL", "CZE", "DNK", "FIN", "FRA",
+                 "DEU", "GRC", "HKG", "HUN", "ISL", "IDN", "IRL", "ISR", "ITA", "JPN", "KOR", "LUX", "MYS",
+                 "MEX", "NLD", "NZL", "NOR", "PER", "PHL", "PRT", "RUS", "IND", "SGP", "ZAF", "ESP", "SWE",
+                 "CHE", "THA", "TUR", "EGY", "GBR", "USA", "VEN")
+year <- 1900:2020
+basepanel <-NULL
+for (i in countrylist) {
+  ISO<-rep(i,each=length(year)) 
+  Yr<- year
+  new <- cbind(ISO, Yr)
+  basepanel <- rbind(basepanel, new)
+}
+basepanel<- as.data.frame(basepanel)
+basepanel$Yr <- ymd(basepanel$Yr, truncated = 2L)
+
+MyData <- merge(basepanel, DisasterDF, by=c("ISO","Yr"), all.x = TRUE)
+MyData <- merge(MyData, addstrong, by=c("ISO","Yr"), all.x = TRUE) #adding strong disaster variables
+
+#making indicators: 
+MyData$DisDummy <- ifelse(MyData$NoOfDis >= 1, 1,0) #everything over 1 is coded as 1 
+MyData$StrongDisDummy <- ifelse(MyData$NoOfStrongDis >= 1, 1,0) 
+
+for (varname in c('DisDummy', 'StrongDisDummy', 'w_adj_DAM_000US', 'w_DAM_000US', 'w_DEATH', 'w_adj_strong_DAM_000US',
+                  'w_strong_DAM_000US', 'w_strong_DEATH', 'adj_DAM_000US', 'DAM_000US', 'DEATH', 'adj_strong_DAM_000US', 
+                  'strong_DAM_000US', 'strong_DEATH')) {
+  MyData[,paste(varname)][is.na(MyData[,paste(varname)])] <- 0 #coding NA as 0 damage (since EmDat is a list of observations)
+}
+
+###### ADDING JST DATA ##### 
+#uncomment the next line to download the data instead: 
+#JST<-read_dta('https://www.macrohistory.net/app/download/9834512469/JSTdatasetR6.dta?t=1662029183')
+JST<-read_dta('data/JSTdatasetR6.dta')
+JST$jst <- 1 #for subsetting later
+JST$ISO <- JST$iso #for merging
+JST$Yr <- ymd(JST$year, truncated = 2L)
+
+colnames(JST)
+keep <- c(1,2,3,5,7,9,11,13,14,17,20,21,22,23,24,25,26,31,34,46,47,50,55,56,58,59,60,61,62)
+JST <- subset(JST, select = keep)
+MyData <- merge(MyData, JST, by=c("ISO","Yr"), all.x = TRUE)
+
+###### ADDING BVX DATA ##### 
+#Loading the crisis data: BVX
+BVX <- read_dta("data/BVX_annual_regdata.dta") #Crisis data in the folder
+BVX$ISO <- BVX$ISO3 #renaming ISO code for merging
+BVX$Yr <- ymd(BVX$year, truncated = 2L) #encoding year as a date
+colnames(BVX)
+keep <- c("Yr", "ISO", "decade","rgdp_gr","credit_to_gdp","jointcrisis","JC","revisedcrisis","RC","PANIC_ind","bankeqdecline","C_B30")
+BVX <- subset(BVX, select = keep)
+BVX$bvx <- 1 #for subsetting later
+MyData <- merge(MyData, BVX, by=c("ISO","Yr"), all.x = TRUE)
+
+MyData <- pdata.frame(MyData, index=c("ISO","Yr"), drop.index=FALSE, row.names=TRUE)
+
+#### Creating a lag function ####
+lagvar = function(varname, lags, dataset) {
+  x <- paste(deparse(substitute(varname)))
+  for (i in 1:lags) {
+    dataset[[paste(x,'_L',i,sep="")]] <- lag(dataset[[x]],i)
+  }
+  return(dataset)
+}
+
+b<-lagvar(DisDummy, 4, MyData)
+
+####standardize 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###random code to perhaps re-use later:####
+for (varname in c('DisDummy', 'StrongDisDummy', 'adj_DAM_000US', 'adj_strong_DAM_000US', 'w_adj_DAM_000US')) {
+  for (i in 1:4) {
+    MyData[,paste(varname,'_L',i,sep="")] <- lag(MyData[,paste(varname)], i)
+  }
+}
+

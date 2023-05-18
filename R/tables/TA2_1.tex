@@ -1,0 +1,56 @@
+
+% Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
+% Date and time: Mon, May 15, 2023 - 15:24:52
+% Requires LaTeX packages: dcolumn 
+\begin{table}[!htbp] \centering 
+  \caption{Interaction credit expansions and natural disasters (1900 - 2020)} 
+  \label{TA2_1} 
+\footnotesize 
+\begin{tabular}{@{\extracolsep{5pt}}lD{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{6}{c}{Dependent Variable: Crisis in $year = t$ } \\ 
+\cline{2-7} 
+\\[-1.8ex] & \multicolumn{4}{c}{\textit{logistic}} & \multicolumn{2}{c}{\textit{OLS}} \\ 
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)} & \multicolumn{1}{c}{(5)} & \multicolumn{1}{c}{(6)}\\ 
+\hline \\[-1.8ex] 
+ $Damages (pct GDP)_{t}$ & -0.125 & -0.124 &  &  &  &  \\ 
+  & (0.138) & (0.137) &  &  &  &  \\ 
+  $Damages (pct GDP)_{t-1}$ & 0.033 & 0.033 &  &  &  &  \\ 
+  & (0.027) & (0.028) &  &  &  &  \\ 
+  $Damages (pct GDP)_{t-2}$ & 0.074^{**} & 0.078^{**} &  &  &  &  \\ 
+  & (0.036) & (0.039) &  &  &  &  \\ 
+  $Damages (pct GDP)_{t-3}$ & 0.078^{**} & 0.078^{**} &  &  &  &  \\ 
+  & (0.035) & (0.035) &  &  &  &  \\ 
+  $\Delta Credit_{t-1}$ & -0.333 & -0.319 &  &  &  &  \\ 
+  & (1.244) & (1.257) &  &  &  &  \\ 
+  $\Delta Credit_{t-2}$ & 8.137^{***} & 8.155^{***} &  &  &  &  \\ 
+  & (1.522) & (1.530) &  &  &  &  \\ 
+  $\Delta Credit_{t-3}$ & -0.537 & -0.526 &  &  &  &  \\ 
+  & (1.405) & (1.410) &  &  &  &  \\ 
+  $\Delta Credit_{t-4}$ & 1.931^{*} & 1.929^{*} &  &  &  &  \\ 
+  & (1.022) & (1.022) &  &  &  &  \\ 
+  Damages 5yr ma &  &  & 0.184^{***} & -0.080 & 0.008 & 0.003 \\ 
+  &  &  & (0.064) & (0.162) & (0.006) & (0.004) \\ 
+  Credit 5yr ma &  &  & 9.554^{***} & 8.293^{***} & 0.199^{***} & 0.179^{***} \\ 
+  &  &  & (2.596) & (2.536) & (0.067) & (0.068) \\ 
+  $Damages_{t-2} \times \Delta Credit_{t-2}$ &  & -0.245 &  &  &  &  \\ 
+  &  & (0.724) &  &  &  &  \\ 
+  Damages ma $\times \Delta Credit$ ma &  &  &  & 9.948^{***} &  & 0.299 \\ 
+  &  &  &  & (3.438) &  & (0.196) \\ 
+  Constant & -5.321^{***} & -5.319^{***} & -5.320^{***} & -5.688^{***} & -0.033^{**} & -0.037^{***} \\ 
+  & (1.025) & (1.025) & (1.002) & (1.098) & (0.014) & (0.014) \\ 
+ \hline \\[-1.8ex] 
+Country fixed effects & Yes & Yes & Yes & Yes & Yes & Yes \\ 
+Year fixed effects & No & No & No & No & Yes & Yes \\ 
+Observations & \multicolumn{1}{c}{1,964} & \multicolumn{1}{c}{1,964} & \multicolumn{1}{c}{1,966} & \multicolumn{1}{c}{1,966} & \multicolumn{1}{c}{1,966} & \multicolumn{1}{c}{1,966} \\ 
+Adjusted R$^{2}$ &  &  &  &  & \multicolumn{1}{c}{0.222} & \multicolumn{1}{c}{0.224} \\ 
+Log Likelihood & \multicolumn{1}{c}{-233.230} & \multicolumn{1}{c}{-233.208} & \multicolumn{1}{c}{-240.674} & \multicolumn{1}{c}{-235.443} &  &  \\ 
+Residual Std. Error &  &  &  &  & \multicolumn{1}{c}{0.148} & \multicolumn{1}{c}{0.148} \\ 
+F Statistic &  &  &  &  & \multicolumn{1}{c}{5.165$^{***}$} & \multicolumn{1}{c}{5.180$^{***}$} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{6}{l}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+ & \multicolumn{6}{l}{Heteroskedasticity-robust standard errors are shown in parentheses.} \\ 
+\end{tabular} 
+\end{table} 

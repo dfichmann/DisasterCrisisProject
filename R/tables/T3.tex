@@ -1,0 +1,41 @@
+
+% Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
+% Date and time: Mon, May 15, 2023 - 15:24:57
+% Requires LaTeX packages: dcolumn 
+\begin{table}[!htbp] \centering 
+  \caption{Effect on a Crisis "Danger Zone" (1900 - 2020)} 
+  \label{T3} 
+\footnotesize 
+\begin{tabular}{@{\extracolsep{-5pt}}lD{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{Dependent Variable: Crisis Danger Zone } \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{2}{c}{\textit{logistic}} & \multicolumn{2}{c}{\textit{OLS}} \\ 
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)}\\ 
+\hline \\[-1.8ex] 
+ $Damages (pc GDP)_{t-1}$ & 0.068^{*} & -0.009 & 0.008^{***} & 0.006^{***} \\ 
+  & (0.038) & (0.017) & (0.001) & (0.001) \\ 
+  $\Delta Credit_{t-1}$ & 5.493^{***} & 5.219^{***} & 0.213^{***} & 0.209^{***} \\ 
+  & (1.514) & (1.470) & (0.080) & (0.080) \\ 
+  $\Delta GDP_{t-1}$ & -4.269^{**} & -4.253^{**} & -0.046 & -0.044 \\ 
+  & (1.782) & (1.800) & (0.111) & (0.111) \\ 
+  $Damages_{t-1} \times \Delta Credit_{t-1}$ &  & 5.377^{***} &  & 0.108 \\ 
+  &  & (1.500) &  & (0.076) \\ 
+  Constant & -3.812^{***} & -4.023^{***} & -0.078^{***} & -0.079^{***} \\ 
+  & (0.086) & (0.140) & (0.014) & (0.015) \\ 
+ \hline \\[-1.8ex] 
+Country fixed effects & Yes & Yes & Yes & Yes \\ 
+Year fixed effects & No & No & Yes & Yes \\ 
+Restricted sample & No & No &  No & No \\ 
+Observations & \multicolumn{1}{c}{1,985} & \multicolumn{1}{c}{1,985} & \multicolumn{1}{c}{1,985} & \multicolumn{1}{c}{1,985} \\ 
+Adjusted R$^{2}$ &  &  & \multicolumn{1}{c}{0.312} & \multicolumn{1}{c}{0.312} \\ 
+Log Likelihood & \multicolumn{1}{c}{-544.567} & \multicolumn{1}{c}{-537.591} &  &  \\ 
+Residual Std. Error &  &  & \multicolumn{1}{c}{0.234} & \multicolumn{1}{c}{0.234} \\ 
+F Statistic &  &  & \multicolumn{1}{c}{7.612$^{***}$} & \multicolumn{1}{c}{7.569$^{***}$} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{l}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+ & \multicolumn{4}{l}{Cluster-robust standard errors are shown in parentheses.} \\ 
+\end{tabular} 
+\end{table} 
