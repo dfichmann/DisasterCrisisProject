@@ -214,12 +214,17 @@ for (m in c("TotalDeath", "TotalDamages_000US", "TotalDamagesAdj_000US")) {
   EmDat[, paste("weighted", m, sep = "_")] <- EmDat[, paste(m)] * EmDat$mWeight
 }
 
-# Calculating the country specific median
+# # Calculating the country specific median
+# EmDat2 <- EmDat %>%
+#   group_by(ISO) %>%
+#   mutate(median_damage = median(TotalDamagesAdj_000US, na.rm = TRUE)) %>%
+#   ungroup()
+
 EmDat <- EmDat %>%
   group_by(ISO) %>%
-  mutate(median_damage = median(TotalDamagesAdj_000US, na.rm = TRUE)) %>%
+  mutate(median_damage = median(TotalDamagesAdj_000US[!is.na(TotalDamagesAdj_000US)])) %>%
   ungroup()
-#
+
 
 ### Collapsing / Summarizing
 
