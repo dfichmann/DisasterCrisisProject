@@ -4,7 +4,7 @@ This repository contains all the files and materials related to my thesis projec
 
 ## Contents
 
-- <mark>[**Most Recent Draft**](MasterThesis_UpToDate.pdf): Click here for the most recent version of my thesis</mark>
+- <mark>[**Most Recent Draft**](MasterThesis_UpToDate.pdf)<mark>: Click here for the most recent version of my thesis</mark>
 
 - [R/](R/): A folder containing all the R code used in my project.
   - <mark>[**MainScript**](R/MainScript.R)<mark>: The main R script that reproduces all results!
