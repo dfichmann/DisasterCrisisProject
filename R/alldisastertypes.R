@@ -38,7 +38,7 @@ cluster_se_T2M3 <- sqrt(diag(cluster.vcov(T2M3, MyData$ISO)))
 cluster_se_T2M4 <- sqrt(diag(cluster.vcov(T2M4, MyData$ISO)))
 
 stargazer(T1M2,T1M3,T2M3,T2M4,
-          title = 'Main results including other types of disasters',
+          title = 'Robust: Main results including other types of disasters',
           label='TA_alltypes.tex', type = 'latex', 
           out = 'tables/TA_alltypes.tex',
           

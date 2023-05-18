@@ -109,7 +109,7 @@ robust_se_T2M5 <- sqrt(diag(vcovHC(T2M5, type = "HC1")))
 robust_se_T2M6 <- sqrt(diag(vcovHC(T2M6, type = "HC1")))
 
 stargazer(T2M1,T2M2,T2M3,T2M4,T2M5,T2M6,
-          title = 'Interaction credit expansions and natural disasters (1900 - 2020)',
+          title = 'Robust: Interaction credit expansions and natural disasters (1900 - 2020)',
           label='TA2_1', type = 'latex', 
           out = 'tables/TA2_1.tex',
           
@@ -245,7 +245,7 @@ ncvTest(T2M5)
 ncvTest(T2M6)
 
 stargazer(T2M1,T2M2,T2M3,T2M4,T2M5,T2M6,
-          title = 'ANNEX: Interaction credit expansions and natural disasters with GDP controls (1900 - 2020)',
+          title = 'Robust: Interaction credit expansions and natural disasters with GDP controls (1900 - 2020)',
           label='TA2_2', type = 'latex',
           out = 'tables/TA2_2.tex',
           

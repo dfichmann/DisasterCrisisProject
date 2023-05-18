@@ -73,7 +73,7 @@ stargazer(T3M1,T3M2,T3M3,T3M4,
 #Table with heteroskedasticity-robust standard errors
 
 stargazer(T3M1,T3M2,T3M3,T3M4,
-          title = 'ANNEX: Effect on a Crisis \"Danger Zone\" (1900 - 2020)',
+          title = 'Robust: Effect on a Crisis \"Danger Zone\" (1900 - 2020)',
           label='TA3_1', type = 'latex',
           out = 'tables/TA3_1.tex',
           

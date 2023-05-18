@@ -46,12 +46,10 @@ packages <- c("multiwayvcov", # for clustered standard errors
               "tibble",  #for data manipulation 
               "fixest" ,#for fixed effects 
               "RColorBrewer" ,#for colors 
-              "xtable", #for tables 
-              "ROCR", #for ROC curves 
-              "pROC", #for ROC curves 
-              "plotROC", #for ROC curves
-              "gridExtra",
-              "reshape2") #for plotting
+              "xtable" ,#for tables 
+              "ROCR" ,#for ROC curves 
+              "pROC" ,#for ROC curves 
+              "plotROC")#for ROC curves
 
 for (package in packages) {
   if (!require(package, character.only = TRUE)) {
@@ -102,15 +100,12 @@ basepanel <- as.data.frame(basepanel) # make it a dataframe
 basepanel$year_var <- basepanel$Yr # for merging
 basepanel$Yr <- ymd(basepanel$Yr, truncated = 2L) # for merging
 
-countrymeta <- read_csv("data/country_group.csv", show_col_types = FALSE) # read in country metadata
-suppressWarnings({
+countrymeta <- read_csv("data/country_group.csv") # read in country metadata
 countrymeta$ISO <- countrycode(countrymeta$country,
   origin = "country.name",
   destination = "iso3c"
 ) # get ISO codes
-})
 countrymeta <- subset(countrymeta, select = c(income_group, region, ISO)) # keep only relevant columns
-
 # merge
 basepanel <- merge(basepanel, countrymeta, by = c("ISO"), all.x = TRUE) # merge
 
@@ -201,9 +196,7 @@ colnames(EmDat)[15] <- "TotalDamages_000US"
 colnames(EmDat)[16] <- "TotalDamagesAdj_000US"
 
 EmDat$DateYM <- paste(EmDat$StartYear, EmDat$StartMonth, sep = "-") # creating date variable
-suppressWarnings({
 EmDat$DateYM <- ym(EmDat$DateYM) # encoding date
-})
 EmDat$year_month <- format(EmDat$DateYM, "%Y-%m") # creating year_month variable
 EmDat$Yr <- ymd(EmDat$Year, truncated = 2L) # encoding year as a date
 
@@ -214,10 +207,11 @@ for (m in c("TotalDeath", "TotalDamages_000US", "TotalDamagesAdj_000US")) {
   EmDat[, paste("weighted", m, sep = "_")] <- EmDat[, paste(m)] * EmDat$mWeight
 }
 
-# Calculating the country specific median
-EmDat <- EmDat %>%
+# The following is no longer needed
+EmDat_Strong <- EmDat %>%
   group_by(ISO) %>%
   mutate(median_damage = median(TotalDamagesAdj_000US, na.rm = TRUE)) %>%
+  filter(TotalDamagesAdj_000US > median_damage) %>%
   ungroup()
 #
 
@@ -234,7 +228,6 @@ for (i in seq_along(disisasterlists)) {
   list_name <- names(disisasterlists)[i]
   df_name <- paste(list_name)
   d_types <- disisasterlists[[i]]
-  
   # function to sum if not all NA
   sum_if_not_all_na <- function(x) {
     if (all(is.na(x))) { # if all is NA
@@ -245,13 +238,12 @@ for (i in seq_along(disisasterlists)) {
   }
   # creating a function to calculate strong metric
   calculate_strong_metric <- function(
-    filtervar,
-    threshold,
+    filter_var, # variable to filter the median by (this is set to TotalDamagesAdj_000US in the loop below)
     var, # the variable that is actually being summed
     value # the value to return if the filter variable is less than the median (this is set to 0 in the loop below)
     ) {
     ifelse(
-      filtervar > threshold, # if the filter variable is greater than the country specific median
+      filter_var > quantile(filter_var, 0.5, na.rm = TRUE), # if the filter variable is greater than the median
       var, # return the variable
       value # else return the value (0)
     )
@@ -266,19 +258,23 @@ for (i in seq_along(disisasterlists)) {
       w_adj_DAM_000US = sum_if_not_all_na(weighted_TotalDamagesAdj_000US),
       w_DAM_000US = sum_if_not_all_na(weighted_TotalDamages_000US),
       w_DEATH = sum_if_not_all_na(weighted_TotalDeath),
-      w_strong_DAM_000US = sum_if_not_all_na(calculate_strong_metric(filtervar = TotalDamagesAdj_000US, threshold = median_damage, var = weighted_TotalDamages_000US, value = 0)),
-      adj_strong_DAM_000US = sum_if_not_all_na(calculate_strong_metric(filtervar = TotalDamagesAdj_000US, threshold = median_damage, var = TotalDamagesAdj_000US, value = 0)),
-      strong_DAM_000US = sum_if_not_all_na(calculate_strong_metric(filtervar = TotalDamagesAdj_000US, threshold = median_damage, var = TotalDamages_000US, value = 0)),
-      strong_DEATH = sum_if_not_all_na(calculate_strong_metric(filtervar = TotalDamagesAdj_000US, threshold = median_damage, var = TotalDeath, value = 0)),
-      w_adj_strong_DAM_000US = sum_if_not_all_na(calculate_strong_metric(filtervar = TotalDamagesAdj_000US, threshold = median_damage, var = weighted_TotalDamages_000US, value = 0)),
-      w_strong_DEATH = sum_if_not_all_na(calculate_strong_metric(filtervar = TotalDamagesAdj_000US, threshold = median_damage, var = weighted_TotalDeath, value = 0)),
-      NoOfStrongDisaster = sum_if_not_all_na(calculate_strong_metric(filtervar = TotalDamagesAdj_000US, threshold = median_damage, var = 1, value = 0)),
-      w_NoOfStrongDisaster = sum_if_not_all_na(calculate_strong_metric(filtervar = TotalDamagesAdj_000US, threshold = median_damage, var = mWeight, value = 0)),
+      w_strong_DAM_000US = sum_if_not_all_na(calculate_strong_metric(TotalDamagesAdj_000US, weighted_TotalDamages_000US, 0)),
+      adj_strong_DAM_000US = sum_if_not_all_na(calculate_strong_metric(TotalDamagesAdj_000US, TotalDamagesAdj_000US, 0)),
+      strong_DAM_000US = sum_if_not_all_na(calculate_strong_metric(TotalDamagesAdj_000US, TotalDamages_000US, 0)),
+      strong_DEATH = sum_if_not_all_na(calculate_strong_metric(TotalDamagesAdj_000US, TotalDeath, 0)),
+      w_adj_strong_DAM_000US = sum_if_not_all_na(calculate_strong_metric(TotalDamagesAdj_000US, weighted_TotalDamages_000US, 0)),
+      w_strong_DEATH = sum_if_not_all_na(calculate_strong_metric(TotalDamagesAdj_000US, weighted_TotalDeath, 0)),
+      NoOfStrongDisaster = sum_if_not_all_na(calculate_strong_metric(TotalDamagesAdj_000US, 1, 0)),
+      w_NoOfStrongDisaster = sum_if_not_all_na(calculate_strong_metric(TotalDamagesAdj_000US, mWeight, 0)),
       W_NoOfDis = sum_if_not_all_na(mWeight),
       NoOfDis = n(),
       .groups = "drop"
     )
 
+
+  ###############################
+  # DisasterDF <- replace(DisasterDF, is.na(DisasterDF), -99999)
+  # addstrong <- replace(addstrong, is.na(addstrong), -99999)
 
   ### Merging datasets together
   MyData <- merge(basepanel, DisasterDF, by = c("ISO", "Yr"), all.x = TRUE) # merging basepanel with disaster data
@@ -328,24 +324,266 @@ saveRDS(MyData_plus, file = "data/MyData_robustcheck.R") # saving data
 
 #-------------------------------------------- 
 
+
 # ANALYSIS  ####
 MyData <- readRDS("data/MyData.R") # loading data
 MyData_robustcheck <- readRDS("data/MyData_robustcheck.R") # loading data
 ## REG TABLES 1-3             #######
-source("regtable1.R") # regression tables
-source("regtable2.R") # regression tables
-source("alldisastertypes.R") #using MyData_robustcheck
-source("regtable3.R") # regression tables
+source("regtable1.R") # regression table 1
+source("regtable2.R") # regression table 2
+source("regtable3.R") # regression table 3
 ## SUM STATS TABLE             #######
 source("summarystats1.R") # sum stats table 1
 ## PLOTS                      #######
-source("countrydisasterplots.R") 
+source("countrydisasterplots.R") # plots of disasters
 source("prediction.R")
 source("LPs.R")
 
-#Extension:                   #######
-#source("monthly_analysis.R")
 
 
 
 
+
+
+
+
+
+
+
+
+
+########## Monthly test? ###########
+# Loading the crisis data: BVX
+
+BVXmonthly <- read_dta("data/master_data_monthly.dta") # Crisis data in the folder
+# Transform into year and month variables
+BVXmonthly$year_variable <- as.integer(substring(BVXmonthly$date, 1, 4))
+BVXmonthly$month_variable <- as.integer(substring(BVXmonthly$date, 6))
+
+# Transform into date variable
+BVXmonthly$date <- as.Date(paste(BVXmonthly$year_variable, BVXmonthly$month_variable, "1", sep = "-"), format = "%Y-%m-%d")
+# Convert to ISO codes
+BVXmonthly$ISO <- countrycode(BVXmonthly$country, "country.name", "iso3c")
+BVXmonthly <- subset(BVXmonthly, select = c("sB", "sC", "rN", "rB", "date", "year_variable", "month_variable", "ISO"))
+
+# Convert date to year and month format
+BVXmonthly$year_month <- format(BVXmonthly$date, "%Y-%m")
+
+
+
+
+# Set start and end dates
+start_date <- ymd("1900-01-01")
+end_date <- ymd("2018-12-01")
+
+# Create a sequence of monthly dates
+monthly_dates <- seq(start_date, end_date, by = "month")
+
+# Create a data frame with all combinations of countries and monthly dates
+countrylist <- unique(BVXmonthly$ISO)
+panel_data <- expand.grid(ISO = countrylist, date = monthly_dates)
+
+# Add separate year and month columns
+panel_data$Yr <- year(panel_data$date)
+panel_data$Mo <- month(panel_data$date)
+
+# Convert date to year and month format
+panel_data$year_month <- format(panel_data$date, "%Y-%m")
+panel_data <- panel_data[, c("ISO", "year_month")]
+
+# Merge with basepanel
+MyMonthlyData <- merge(panel_data, BVXmonthly, by = c("ISO", "year_month"), all.x = TRUE)
+
+DisasterDF_month <- subset(EmDat, `DisasterType` %in% disasterlist) %>%
+  group_by(year_month, ISO) %>% # grouping over year and country
+  summarize(
+    adj_DAM_000US = sum(TotalDamagesAdj_000US),
+    DAM_000US = sum(TotalDamages_000US),
+    DEATH = sum(TotalDeath),
+    w_adj_DAM_000US = sum(weighted_TotalDamagesAdj_000US),
+    w_DAM_000US = sum(weighted_TotalDamages_000US),
+    w_DEATH = sum(weighted_TotalDeath),
+    NoOfDis = n(),
+    .groups = "drop"
+  )
+
+addstrong_month <- subset(EmDat, `DisasterType` %in% disasterlist &
+  TotalDamagesAdj_000US > median(EmDat$TotalDamagesAdj_000US, na.rm = TRUE)) %>% # only abovemedian disasters
+  group_by(year_month, ISO) %>%
+  summarize(
+    adj_strong_DAM_000US = sum(TotalDamagesAdj_000US),
+    strong_DAM_000US = sum(TotalDamages_000US),
+    strong_DEATH = sum(TotalDeath),
+    w_adj_strong_DAM_000US = sum(weighted_TotalDamagesAdj_000US),
+    w_strong_DAM_000US = sum(weighted_TotalDamages_000US),
+    w_strong_DEATH = sum(weighted_TotalDeath),
+    NoOfStrongDis = n(),
+    .groups = "drop"
+  )
+
+MyMonthlyData <- merge(MyMonthlyData, DisasterDF_month, by = c("ISO", "year_month"), all.x = TRUE)
+MyMonthlyData <- merge(MyMonthlyData, addstrong_month, by = c("ISO", "year_month"), all.x = TRUE)
+MyMonthlyData <- pdata.frame(MyMonthlyData, index = c("ISO", "year_month"), drop.index = FALSE, row.names = TRUE)
+
+MyMonthlyData$DisDummy <- ifelse(MyMonthlyData$NoOfDis >= 1, 1, 0) # everything over 1 is coded as 1
+MyMonthlyData$StrongDisDummy <- ifelse(MyMonthlyData$NoOfStrongDis >= 1, 1, 0)
+
+for (varname in c(
+  "DisDummy", "StrongDisDummy", "w_adj_DAM_000US", "w_DAM_000US", "w_DEATH", "w_adj_strong_DAM_000US",
+  "w_strong_DAM_000US", "w_strong_DEATH", "adj_DAM_000US", "DAM_000US", "DEATH", "adj_strong_DAM_000US",
+  "strong_DAM_000US", "strong_DEATH"
+)) {
+  MyMonthlyData[, paste(varname)][is.na(MyMonthlyData[, paste(varname)])] <- 0 # coding NA as 0 damage (since EmDat is a list of observations)
+}
+
+MyMonthlyData <- lagvar(adj_strong_DAM_000US, 4, MyMonthlyData)
+MyMonthlyData <- lagvar(adj_DAM_000US, 4, MyMonthlyData)
+
+MyMonthlyData2 <- filter(MyMonthlyData, Yr > 1950)
+test <- lm(rB ~ adj_DAM_000US + adj_DAM_000US_L1 +
+  adj_DAM_000US_L2 + adj_DAM_000US_L3 +
+  factor(ISO), MyMonthlyData2)
+summary(test)
+
+MyMonthlyData$DisDummy <- ifelse(MyMonthlyData$NoOfDis >= 1, 1, 0) # everything over 1 is coded as 1
+MyMonthlyData <- lagvar(StrongDisDummy, 4, MyMonthlyData)
+test <- lm(sC ~ StrongDisDummy + StrongDisDummy_L1 +
+  StrongDisDummy_L2 + StrongDisDummy_L3 +
+  factor(ISO), MyMonthlyData)
+summary(test)
+
+
+######## Local Projections ######
+
+MyMonthlyData <- filter(MyMonthlyData, Yr > 1950)
+
+for (i in 1:12) {
+  MyMonthlyData <- MyMonthlyData %>%
+    arrange(ISO, year_month) %>%
+    group_by(ISO) %>%
+    mutate(!!paste0("sC_F", i) := dplyr::lead(sC, i))
+}
+
+vars <- list(MyMonthlyData$sC)
+for (i in 1:12) {
+  vars[[i + 1]] <- MyMonthlyData[[paste0("sC_F", i)]]
+}
+
+for (i in 1:12) {
+  MyMonthlyData <- MyMonthlyData %>%
+    arrange(ISO, year_month) %>%
+    group_by(ISO) %>%
+    mutate(!!paste0("rB_F", i) := dplyr::lead(rB, i))
+}
+vars <- list(MyMonthlyData$rB)
+for (i in 1:12) {
+  vars2[[i + 1]] <- MyMonthlyData[[paste0("rB_F", i)]]
+}
+
+for (i in 1:12) {
+  MyMonthlyData <- MyMonthlyData %>%
+    arrange(ISO, year_month) %>%
+    group_by(ISO) %>%
+    mutate(!!paste0("sB_F", i) := dplyr::lead(sB, i))
+}
+vars3 <- list(MyMonthlyData$sB)
+for (i in 1:12) {
+  vars3[[i + 1]] <- MyMonthlyData[[paste0("sB_F", i)]]
+}
+
+for (i in 1:12) {
+  MyMonthlyData <- MyMonthlyData %>%
+    arrange(ISO, year_month) %>%
+    group_by(ISO) %>%
+    mutate(!!paste0("rN_F", i) := dplyr::lead(rN, i))
+}
+vars4 <- list(MyMonthlyData$rN)
+for (i in 1:12) {
+  vars4[[i + 1]] <- MyMonthlyData[[paste0("rN_F", i)]]
+}
+
+# List to store regressions
+reglist <- list()
+for (i in 1:length(vars2)) {
+  x <- vars2[[i]]
+  reglist[[i]] <- lm(
+    x ~ StrongDisDummy
+      + factor(ISO),
+    MyMonthlyData
+  )
+  reglist[[i]] <- coeftest(reglist[[i]], vcov = vcovHC(reglist[[i]], cluster = "ISO", type = "HC2"))
+  model <- tidy(reglist[[i]], conf.int = TRUE, conf.level = 0.9) %>%
+    filter(term == "StrongDisDummy") %>%
+    mutate(model = paste("h=", i, sep = ""))
+  if (i == 1) {
+    regdf <- model
+  } else {
+    regdf <- rbind(regdf, model)
+  }
+}
+
+regdf <- rbind(tibble(
+  term = "StrongDisDummy",
+  estimate = 0,
+  std.error = 0,
+  statistic = 0,
+  p.value = 0,
+  conf.low = 0,
+  conf.high = 0,
+  model = "h=0"
+), regdf)
+regdf$lp <- 1
+
+pd <- position_dodge(0.1)
+gdplp <- ggplot(regdf, aes(model, estimate, group = lp)) +
+  geom_point() +
+  geom_line(linetype = "dashed", color = "blue", size = .8) +
+  theme_bw() +
+  geom_hline(yintercept = 0) +
+  scale_y_continuous("log change in real GDP") +
+  xlab("Years after disaster") +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.1, position = pd)
+
+gdplp
+
+
+######### Monthly crises data #########
+
+BVX_Monthly_List_of_Crises <- read_excel("data/BVX_Monthly_List_of_Crises.xlsx")
+BVX_Monthly_List_of_Crises$year_month <- format(parse_date_time(BVX_Monthly_List_of_Crises$Panic_date, orders = "%B %Y"), "%Y-%m")
+BVX_Monthly_List_of_Crises$ISO <- countrycode(BVX_Monthly_List_of_Crises$Country, "country.name", "iso3c")
+
+MyMonthlyData <- merge(panel_data, BVX_Monthly_List_of_Crises, by = c("ISO", "year_month"), all.x = TRUE)
+MyMonthlyData <- merge(MyMonthlyData, DisasterDF_month, by = c("ISO", "year_month"), all.x = TRUE)
+MyMonthlyData <- merge(MyMonthlyData, addstrong_month, by = c("ISO", "year_month"), all.x = TRUE)
+
+MyMonthlyData <- pdata.frame(MyMonthlyData, index = c("ISO", "year_month"), drop.index = FALSE, row.names = TRUE)
+
+MyMonthlyData$DisDummy <- ifelse(MyMonthlyData$NoOfDis >= 1, 1, 0) # everything over 1 is coded as 1
+MyMonthlyData$StrongDisDummy <- ifelse(MyMonthlyData$NoOfStrongDis >= 1, 1, 0)
+
+for (varname in c(
+  "DisDummy", "StrongDisDummy", "w_adj_DAM_000US", "w_DAM_000US", "w_DEATH", "w_adj_strong_DAM_000US",
+  "w_strong_DAM_000US", "w_strong_DEATH", "adj_DAM_000US", "DAM_000US", "DEATH", "adj_strong_DAM_000US",
+  "strong_DAM_000US", "Panic"
+)) {
+  MyMonthlyData[, paste(varname)][is.na(MyMonthlyData[, paste(varname)])] <- 0 # coding NA as 0 damage (since EmDat is a list of observations)
+}
+
+MyMonthlyData <- lagvar(adj_strong_DAM_000US, 12, MyMonthlyData)
+MyMonthlyData <- lagvar(adj_DAM_000US, 12, MyMonthlyData)
+MyMonthlyData <- lagvar(StrongDisDummy, 12, MyMonthlyData)
+MyMonthlyData <- lagvar(DisDummy, 12, MyMonthlyData)
+
+MyMonthlyData2 <- filter(MyMonthlyData, Yr > 1950)
+
+test <- lm(Panic ~ adj_strong_DAM_000US + adj_strong_DAM_000US_L1 +
+  adj_strong_DAM_000US_L2 + adj_strong_DAM_000US_L3 +
+  adj_strong_DAM_000US_L4 + adj_strong_DAM_000US_L5 +
+  adj_strong_DAM_000US_L6 + factor(ISO), MyMonthlyData)
+summary(test)
+test <- lm(Panic ~ DisDummy + DisDummy_L1 +
+  DisDummy_L2 + DisDummy_L3 +
+  DisDummy_L4 + DisDummy_L5 +
+  DisDummy_L6 + factor(ISO), MyMonthlyData)
+summary(test)

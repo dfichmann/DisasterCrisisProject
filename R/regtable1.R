@@ -86,7 +86,7 @@ robust_se_T1M4 <- sqrt(diag(vcovHC(T1M4, type = "HC1"))) #robust standard errors
 robust_se_T1M5 <- sqrt(diag(vcovHC(T1M5, type = "HC1"))) #robust standard errors
 
 stargazer(T1M1,T1M2,T1M3,T1M4,T1M5, 
-          title = 'ANNEX: Effect of a strong natural disaster on crisis risk (1900 - 2020)',
+          title = 'Robust: Effect of a strong natural disaster on crisis risk (1900 - 2020)',
           label='TA1_1', type = 'latex', 
           out = 'tables/TA1_1.tex',
           
@@ -145,7 +145,7 @@ cluster_se_T1M4 <- sqrt(diag(cluster.vcov(T1M4, MyData$ISO)))
 cluster_se_T1M5 <- sqrt(diag(cluster.vcov(T1M5, MyData$ISO)))
 
 stargazer(T1M1,T1M2,T1M3,T1M4,T1M5,
-          title = 'ANNEX Effect of a strong natural disaster (unweighted) on crisis risk (1900 - 2020)',
+          title = 'Robust: Effect of a strong natural disaster (unweighted) on crisis risk (1900 - 2020)',
           label='TA1_2', type = 'latex', out = 'tables/TA1_2.tex',
           
           font.size = "footnotesize", no.space = TRUE, multicolumn = TRUE,
@@ -204,7 +204,7 @@ cluster_se_T1M4 <- sqrt(diag(cluster.vcov(T1M4, MyData$ISO)))
 cluster_se_T1M5 <- sqrt(diag(cluster.vcov(T1M5, MyData$ISO)))
 
 stargazer(T1M1,T1M2,T1M3,T1M4,T1M5,
-          title = 'ANNEX Effect of a natural disaster on crisis risk (1900 - 2020)',
+          title = 'Robust: Effect of a natural disaster on crisis risk (1900 - 2020)',
           label='TA1_3', type = 'latex', out = 'tables/TA1_3.tex',
           
           font.size = "footnotesize", no.space = TRUE, multicolumn = TRUE,
@@ -258,7 +258,7 @@ cluster_se_T1M2 <- sqrt(diag(cluster.vcov(T1M2, MyData$ISO))) #clustered at the 
  #Table 1 with BVX Data instead:
 
 stargazer(T1M1,T1M2, 
-          title = 'Effect of a strong natural disaster on crisis risk (with additional countries) (1960 - 2020)', 
+          title = 'Robust: Effect of a strong natural disaster on crisis risk (with additional countries) (1960 - 2020)', 
           label='T1_bvx', type = 'latex',
           out = 'tables/T1_bvx.tex',
           
@@ -320,7 +320,7 @@ cluster_se_T1M2 <- sqrt(diag(cluster.vcov(T1M2, data_subset$ISO))) #clustered at
 cluster_se_T1M3 <- sqrt(diag(cluster.vcov(T1M3, data_subset$ISO))) #clustered at the country level
 cluster_se_T1M4 <- sqrt(diag(cluster.vcov(T1M4, data_subset$ISO))) #clustered at the country level
 stargazer(T1M1,T1M2,T1M3,T1M4, 
-          title = 'ANNEX: Additional Robustness checks (1900 - 2020)', 
+          title = 'Robust: Additional Robustness checks (1900 - 2020)', 
           label='TA1_4', type = 'latex',
           out = 'tables/TA1_4.tex',
           
@@ -377,7 +377,7 @@ cluster_se_T1M4 <- sqrt(diag(cluster.vcov(T1M4, subset(MyData, income_group %in%
                                                            "Upper middle income", "Low income"))$ISO))) 
 
 stargazer(T1M1,T1M2,T1M3,T1M4, 
-          title = 'Disaster Dummies (1900 - 2020)', 
+          title = 'Robust: Disaster Dummies (1900 - 2020)', 
           label='T1_dummy', type = 'latex',
           out = 'tables/T1_dummy.tex',
           
