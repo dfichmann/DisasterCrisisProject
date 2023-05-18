@@ -7,7 +7,7 @@ This repository contains all the files and materials related to my thesis projec
 - <mark>[**Most Recent Draft**](MasterThesis_UpToDate.pdf)<mark>: Click here for the most recent version of my thesis</mark>
 
 - [R/](R/): A folder containing all the R code used in my project.
-  - <mark>[**MainScript**](R/MainScript.R)<mark>: The main R script that reproduces all results!
+  - <mark>[**MainScript**](R/MainScript_DisasterCrisisProject.R)<mark>: The main R script that reproduces all results!
   - [data/](R/data): A folder containing datasets used in my project (some are downloaded directly in the R script).
   - [tables/](R/tables): A folder containing all the .tex tables generated in R.
   - [plots/](R/plots): A folder containing all the plots generated in R.
@@ -15,9 +15,9 @@ This repository contains all the files and materials related to my thesis projec
 
 ## Replication Files
 
-To reproduce the results of my thesis, you will need to have R installed on your computer, change the directory accordingly, and, run the [MainScript.R](R/MainScript.R) in the [R/](R/) folder.
+To reproduce the results of my thesis, you will need to have R installed on your computer, change the directory accordingly, and, run the [MainScript.R](R/MainScript_DisasterCrisisProject.R) in the [R/](R/) folder.
 
-To save time, if you have RStudio installed, the `setwd(dirname(rstudioapi::getActiveDocumentContext()$path))` command at the begging of the [MainScript.R](R/MainScript.R) should automatically set the working directory in R to the directory containing the currently active R script and you should be able to immediately run the code.
+To save time, if you have RStudio installed, the `setwd(dirname(rstudioapi::getActiveDocumentContext()$path))` command at the begging of the [MainScript.R](R/MainScript_DisasterCrisisProject.R) should automatically set the working directory in R to the directory containing the currently active R script and you should be able to immediately run the code.
 
 ## Abstract
 
